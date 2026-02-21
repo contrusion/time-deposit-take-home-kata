@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import org.ikigaidigital.model.TimeDeposit;
+
 public class TimeDepositCalculator {
     public void updateBalance(List<TimeDeposit> xs) {
         for (int i = 0; i < xs.size(); i++) {

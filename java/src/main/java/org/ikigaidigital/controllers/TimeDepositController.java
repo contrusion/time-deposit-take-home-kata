@@ -1,6 +1,6 @@
 package org.ikigaidigital.controllers;
 
-import org.ikigaidigital.TimeDeposit;
+import org.ikigaidigital.model.TimeDeposit;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;

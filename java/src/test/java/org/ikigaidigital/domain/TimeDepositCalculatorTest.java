@@ -1,4 +1,4 @@
-package org.ikigaidigital;
+package org.ikigaidigital.domain;
 
 import org.ikigaidigital.model.TimeDeposit;
 import org.junit.jupiter.api.Test;

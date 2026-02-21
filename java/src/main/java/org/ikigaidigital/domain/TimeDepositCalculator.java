@@ -1,11 +1,13 @@
-package org.ikigaidigital;
+package org.ikigaidigital.domain;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
 import org.ikigaidigital.model.TimeDeposit;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TimeDepositCalculator {
     public void updateBalance(List<TimeDeposit> xs) {
         for (int i = 0; i < xs.size(); i++) {

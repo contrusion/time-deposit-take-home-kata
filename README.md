@@ -62,3 +62,30 @@ A junior developer implemented domain logic for a time deposit system but did no
 ### Submission Instructions
 - Provide clear instructions on how to trigger the endpoints using the Swagger contract.
 - Email the link to your public GitHub repository.
+
+
+
+### Instructions to use Swagger UI:**
+
+1. Open a terminal.
+2. Navigate to your project’s `java` folder:
+   ```
+   cd /${path}/time-deposit-take-home-kata/java
+   ```
+3. Ensure Maven is installed by running:
+   ```
+   mvn -v
+   ```
+   You should see Maven version info. If not, install Maven first.
+   
+4. Build and run the Spring Boot application:
+   ```
+   mvn spring-boot:run
+   ```
+5. Once the application starts, open your browser and go to:
+   ```
+   http://localhost:8080/swagger-ui/index.html
+   ```
+6. Use the Swagger UI to explore and trigger your API endpoints interactively.  
+   - Click on an endpoint to expand details.
+   - Click "Try it out" to send requests and view responses.

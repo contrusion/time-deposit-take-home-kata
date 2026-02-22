@@ -1,33 +1,33 @@
 package org.ikigaidigital.domain;
 
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.ikigaidigital.model.TimeDeposit;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TimeDepositCalculator {
+    private final Map<String, InterestCalculationStrategy> strategyMap = new HashMap<>();
+
+    public TimeDepositCalculator() {
+        strategyMap.put("student", new StudentInterestStrategy());
+        strategyMap.put("premium", new PremiumInterestStrategy());
+        strategyMap.put("basic", new BasicInterestStrategy());
+    }
+
     public void updateBalance(List<TimeDeposit> xs) {
-        for (int i = 0; i < xs.size(); i++) {
+        for (TimeDeposit deposit : xs) {
             double interest = 0;
-
-            if (xs.get(i).getDays() > 30) {
-                if (xs.get(i).getPlanType().equals("student")) {
-                    if (xs.get(i).getDays() < 366) {
-                        interest += xs.get(i).getBalance() * 0.03 / 12;
-                    }
-                } else if (xs.get(i).getPlanType().equals("premium")) {
-                    if (xs.get(i).getDays() > 45) {
-                        interest += xs.get(i).getBalance() * 0.05 / 12;
-                    }
-                } else if (xs.get(i).getPlanType().equals("basic")) {
-                    interest += xs.get(i).getBalance() * 0.01 / 12;
-                }
+            InterestCalculationStrategy strategy = strategyMap.get(deposit.getPlanType());
+            if (strategy != null) {
+                interest = strategy.calculateInterest(deposit);
             }
-
-            double a2d = xs.get(i).getBalance() + (new BigDecimal(interest).setScale(2, RoundingMode.HALF_UP)).doubleValue();
-            xs.get(i).setBalance(a2d);
+            double a2d = deposit.getBalance() + (new BigDecimal(interest).setScale(2, RoundingMode.HALF_UP)).doubleValue();
+            deposit.setBalance(a2d);
         }
     }
 }

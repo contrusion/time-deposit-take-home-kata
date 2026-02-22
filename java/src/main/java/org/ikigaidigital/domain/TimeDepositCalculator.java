@@ -3,7 +3,6 @@ package org.ikigaidigital.domain;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-
 import org.ikigaidigital.model.TimeDeposit;
 import org.springframework.stereotype.Service;
 

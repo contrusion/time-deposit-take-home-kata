@@ -1,23 +1,41 @@
 package org.ikigaidigital.services;
 
+import org.ikigaidigital.dto.TimeDepositDto;
+import org.ikigaidigital.mappers.TimeDepositMapper;
+import org.ikigaidigital.domain.TimeDepositCalculator;
 import org.ikigaidigital.model.TimeDeposit;
 import org.ikigaidigital.repositories.TimeDepositRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TimeDepositService {
+
     private final TimeDepositRepository timeDepositRepository;
+    private final TimeDepositCalculator calculator;
+    private final TimeDepositMapper mapper;
 
     @Autowired
-    public TimeDepositService(TimeDepositRepository timeDepositRepository) {
+    public TimeDepositService(TimeDepositRepository timeDepositRepository,
+                              TimeDepositCalculator calculator,
+                              TimeDepositMapper mapper) {
         this.timeDepositRepository = timeDepositRepository;
+        this.calculator = calculator;
+        this.mapper = mapper;
     }
 
-    public List<TimeDeposit> getAllTimeDeposits() {
-        return timeDepositRepository.findAll();
+    public List<TimeDepositDto> updateDeposits(List<TimeDepositDto> depositDtos) {
+        List<TimeDeposit> deposits = mapper.toEntityList(depositDtos);
+        calculator.updateBalance(deposits);
+        List<TimeDeposit> updated = deposits.stream()
+                .map(this::updateTimeDeposit)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+        return mapper.toDtoList(updated);
     }
 
     /**
@@ -33,13 +51,18 @@ public class TimeDepositService {
      * @return the saved or updated TimeDeposit wrapped in an Optional
      */
     public Optional<TimeDeposit> updateTimeDeposit(TimeDeposit timeDeposit) {
-        // If id is 0 or not present, treat as new entity
         if (timeDeposit.getId() == 0 || !timeDepositRepository.existsById(timeDeposit.getId())) {
             TimeDeposit saved = timeDepositRepository.save(timeDeposit);
             return Optional.of(saved);
         }
-        // If id exists, update the entity
         TimeDeposit saved = timeDepositRepository.save(timeDeposit);
         return Optional.of(saved);
     }
+
+    public List<TimeDepositDto> getAllDeposits() {
+        List<TimeDeposit> deposits = timeDepositRepository.findAll();
+        return mapper.toDtoList(deposits);
+    }
+
+
 }
